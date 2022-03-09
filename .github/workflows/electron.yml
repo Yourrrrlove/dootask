@@ -31,8 +31,16 @@ jobs:
           body: ${{ steps.changelog.outputs.changes }}
 
   build:
-    runs-on: macos-11
+    runs-on: ${{ matrix.os }}
     environment: build
+
+    strategy:
+      matrix:
+        os: [macos-11]
+        platform: [
+            build-mac,
+            build-win
+        ]
 
     if: startsWith(github.event.ref, 'refs/tags/v')
     steps:
@@ -48,5 +56,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           EP_PRE_RELEASE: true
-        run: ./cmd electron publish
+        run: ./cmd electron ${{ matrix.platform }}
 

@@ -13,6 +13,7 @@ const nativeCachePath = path.resolve(__dirname, ".native");
 const devloadCachePath = path.resolve(__dirname, ".devload");
 const packageFile = path.resolve(__dirname, "package.json");
 const packageBakFile = path.resolve(__dirname, "package-bak.json");
+const platform = ["build-mac", "build-win"];
 
 // 克隆 Drawio
 function cloneDrawio(systemInfo) {
@@ -70,7 +71,7 @@ function startBuild(data, publish) {
     econfig.build.pkg.mustClose = [data.id];
     fs.writeFileSync(packageFile, JSON.stringify(econfig, null, 2), 'utf8');
     // build
-    child_process.spawnSync("npm", ["run", "build" + (publish === true ? "-publish" : "")], {stdio: "inherit", cwd: "electron"});
+    child_process.spawnSync("npm", ["run", data.platform + (publish === true ? "-publish" : "")], {stdio: "inherit", cwd: "electron"});
     // package.json Recovery
     fse.copySync(packageBakFile, packageFile)
 }
@@ -80,10 +81,11 @@ if (["dev"].includes(argv[2])) {
     fs.writeFileSync(devloadCachePath, utils.formatUrl("127.0.0.1:" + env.parsed.APP_PORT), 'utf8');
     child_process.spawn("npx", ["mix", "watch", "--hot", "--", "--env", "--electron"], {stdio: "inherit"});
     child_process.spawn("npm", ["run", "start-quiet"], {stdio: "inherit", cwd: "electron"});
-} else if (["publish"].includes(argv[2])) {
+} else if (platform.includes(argv[2])) {
     // 自动编译
     config.app.sites.forEach((data) => {
         if (data.name && data.id && data.url) {
+            data.platform = argv[2];
             startBuild(data, true)
         }
     })
@@ -106,14 +108,32 @@ if (["dev"].includes(argv[2])) {
                 }
                 return value !== ''
             }
+        },
+        {
+            type: 'list',
+            name: 'platform',
+            message: "选择编译系统平台",
+            choices: [{
+                name: "MacOS",
+                value: [platform[0]]
+            }, {
+                name: "Window",
+                value: [platform[1]]
+            }, {
+                name: "All platforms",
+                value: platform
+            }]
         }
     ];
     inquirer.prompt(questions).then(answers => {
-        startBuild({
-            "name": config.name,
-            "id": config.app.id,
-            "url": answers.website
-        }, false)
+        answers.platform.forEach(platform => {
+            startBuild({
+                "name": config.name,
+                "id": config.app.id,
+                "url": answers.website,
+                "platform": platform
+            }, false)
+        });
     });
 }
 
