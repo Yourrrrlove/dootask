@@ -39,10 +39,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node.js 16.x
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 14.x
 
       - name: Build for MacOS
         env:
@@ -59,10 +59,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node.js 16.x
+      - name: Use Node.js 14.x
         uses: actions/setup-node@v1
         with:
-          node-version: 16.x
+          node-version: 14.x
+
+      - name: Prepare for Windows Build
+        shell: powershell
+        run: |
+          npm install
+          cd electron
+          npm install
+          cd ../
 
       - name: Build for Windows
         shell: powershell
@@ -70,10 +78,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           EP_PRE_RELEASE: true
         run: |
-          npm install
-          cd electron
-          npm install
-          cd ../
           mkdir -p ./electron/public
           cp ./electron/index.html ./electron/public/index.html
           node ./electron/build.js build-win

@@ -54,6 +54,7 @@
             "electron.js",
             "utils.js"
         ],
+        "npmRebuild": false,
         "publish": {
             "provider": "github"
         },
@@ -88,13 +89,28 @@
                     "arch": [
                         "x64"
                     ]
+                },
+                {
+                    "target": "portable",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "msi",
+                    "arch": [
+                        "x64"
+                    ]
                 }
             ]
         },
         "nsis": {
             "oneClick": false,
-            "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
+            "perMachine": true,
             "allowToChangeInstallationDirectory": true
+        },
+        "portable": {
+            "artifactName": "${productName}-v${version}-${os}-${arch}-portable.${ext}"
         },
         "pkg": {
             "installLocation": "/Applications",
