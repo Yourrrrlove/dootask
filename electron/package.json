@@ -54,6 +54,7 @@
             "electron.js",
             "utils.js"
         ],
+        "npmRebuild": false,
         "publish": {
             "provider": "github"
         },
@@ -85,6 +86,12 @@
             "target": [
                 {
                     "target": "nsis",
+                    "arch": [
+                        "x64"
+                    ]
+                },
+                {
+                    "target": "msi",
                     "arch": [
                         "x64"
                     ]
