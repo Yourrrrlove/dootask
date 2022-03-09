@@ -91,12 +91,6 @@
                     ]
                 },
                 {
-                    "target": "portable",
-                    "arch": [
-                        "x64"
-                    ]
-                },
-                {
                     "target": "msi",
                     "arch": [
                         "x64"
@@ -106,11 +100,8 @@
         },
         "nsis": {
             "oneClick": false,
-            "perMachine": true,
+            "artifactName": "${productName}-v${version}-${os}-${arch}.${ext}",
             "allowToChangeInstallationDirectory": true
-        },
-        "portable": {
-            "artifactName": "${productName}-v${version}-${os}-${arch}-portable.${ext}"
         },
         "pkg": {
             "installLocation": "/Applications",

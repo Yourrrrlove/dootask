@@ -69,7 +69,7 @@ function startBuild(data, publish) {
     econfig.version = config.version;
     econfig.build.appId = data.id;
     econfig.build.artifactName = utils.getDomain(data.url) + "-v${version}-${os}-${arch}.${ext}";
-    econfig.build.portable.artifactName = utils.getDomain(data.url) + "-v${version}-${os}-${arch}-portable.${ext}";
+    econfig.build.nsis.artifactName = utils.getDomain(data.url) + "-v${version}-${os}-${arch}.${ext}";
     econfig.build.pkg.mustClose = [data.id];
     fs.writeFileSync(packageFile, JSON.stringify(econfig, null, 2), 'utf8');
     // build
