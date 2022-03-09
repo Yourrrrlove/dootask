@@ -65,6 +65,7 @@ jobs:
           node-version: 16.x
 
       - name: Build
+        shell: powershell
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           EP_PRE_RELEASE: true
