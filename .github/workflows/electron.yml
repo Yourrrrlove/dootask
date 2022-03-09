@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Build
+      - name: Build for MacOS
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           EP_PRE_RELEASE: true
@@ -64,10 +64,17 @@ jobs:
         with:
           node-version: 16.x
 
-      - name: Build
+      - name: Build for Windows
         shell: powershell
         env:
           GH_TOKEN: ${{ secrets.GH_PAT }}
           EP_PRE_RELEASE: true
-        run: ./cmd electron build-win
+        run: |
+          npm install
+          cd electron
+          npm install
+          cd ../
+          mkdir -p ./electron/public
+          cp ./electron/index.html ./electron/public/index.html
+          node ./electron/build.js build-win
 
